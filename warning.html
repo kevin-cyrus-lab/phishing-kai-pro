@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Blocked by Kai Phish Shield</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="d-flex justify-content-center align-items-center vh-100 bg-light">
+<div class="card p-4 shadow" style="max-width:600px;">
+  <h4 class="text-danger">🚫 Suspicious Link Blocked</h4>
+  <p id="url" class="text-muted"></p>
+  <p>This link was flagged as potentially unsafe. Proceed only if you trust it.</p>
+  
+  <div class="mb-3">
+    <label for="riskScore" class="form-label">Risk Score</label>
+    <div class="progress">
+      <div id="riskScoreBar" class="progress-bar bg-danger" role="progressbar" style="width: 0%;">0%</div>
+    </div>
+  </div>
+  
+  <div class="d-flex justify-content-end gap-2 mt-3">
+    <button class="btn btn-secondary" onclick="history.back()">Go Back</button>
+    <button class="btn btn-danger" onclick="proceed()">Proceed Anyway</button>
+  </div>
+</div>
+
+<script>
+const params=new URLSearchParams(location.search);
+const blocked_url=params.get('blocked_url')||'';
+const score=parseFloat(params.get('score')||0);
+document.getElementById('url').textContent=blocked_url;
+
+const riskPercent=Math.round(score*100);
+const bar=document.getElementById('riskScoreBar');
+bar.style.width=riskPercent+"%";
+bar.textContent=riskPercent+"%";
+if(riskPercent<40) bar.className="progress-bar bg-success";
+else if(riskPercent<70) bar.className="progress-bar bg-warning";
+else bar.className="progress-bar bg-danger";
+
+function proceed(){if(blocked_url) location.href=blocked_url;}
+</script>
+</body>
+</html>
